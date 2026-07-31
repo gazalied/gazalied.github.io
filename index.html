@@ -1,92 +1,4709 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ASAT Quiz Frontend v3</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#f4b400"
+  >
+
+  <title>DBD v0.7 — Drill Baby Drill</title>
+
   <style>
     :root {
-      --bg:#08111f; --panel:#101b2d; --panel2:#0b1525; --text:#eef6ff; --muted:#93a4b8; --line:#233047;
-      --green:#5ee0a0; --red:#fb7185; --shadow:0 16px 60px rgba(0,0,0,.35); --radius:22px;
+      --background: #121416;
+      --panel: #1c1f22;
+      --inset: #101214;
+      --line: #353a3f;
+
+      --text: #f1eee7;
+      --muted: #9ca2a7;
+
+      --yellow: #f4b400;
+      --yellow-dark: #826100;
+      --green: #68c66b;
+      --red: #ef5350;
+
+      --radius: 12px;
     }
-    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top left,#172554 0,var(--bg) 38%,#050914 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
-    button,input,select,textarea{font:inherit}.wrap{max-width:1100px;margin:0 auto;padding:18px}.hero{background:rgba(16,27,45,.92);border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow);padding:22px;margin-bottom:16px}.hero h1{margin:0;font-size:clamp(30px,6vw,54px);letter-spacing:-.04em;line-height:.95}.hero p{color:var(--muted);margin:10px 0 0;max-width:830px}.grid{display:grid;gap:14px}.two{grid-template-columns:1fr 1fr}.control{grid-template-columns:minmax(0,1fr) 140px;align-items:end}.card{background:rgba(16,27,45,.94);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-    label{display:grid;gap:7px;color:var(--muted);font-size:13px;font-weight:700}select,input,textarea{width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:16px;padding:12px;outline:none}textarea{min-height:260px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}select:focus,input:focus,textarea:focus{border-color:var(--green)}
-    .btn{border:0;background:var(--green);color:#04130c;font-weight:900;border-radius:16px;padding:12px 14px;cursor:pointer;transition:transform .08s ease,opacity .15s ease,background .15s ease;min-height:46px;white-space:nowrap}.btn:hover{background:#7bf0b6}.btn:active{transform:translateY(1px)}.btn.secondary{background:#1d2a42;color:var(--text);border:1px solid var(--line)}.btn.secondary:hover{background:#273957}.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.small{color:var(--muted);font-size:13px}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#0d1b30;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:800}.prompt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.hidden{display:none!important}.question{font-size:clamp(22px,4vw,34px);font-weight:950;letter-spacing:-.03em;margin:10px 0 16px}.options{display:grid;gap:10px}.option{width:100%;text-align:left;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:18px;padding:15px;cursor:pointer;font-weight:700}.option:hover{border-color:#51617c;background:#111f35}.option.correct{background:var(--green);color:#03150d;border-color:var(--green)}.option.wrong{background:var(--red);color:#2c0510;border-color:var(--red)}.feedback{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:14px}.explain-grid{display:grid;gap:10px;margin-top:12px}.explain-item{border:1px solid var(--line);border-radius:16px;padding:12px;background:#091425}.explain-item.correct{border-color:rgba(94,224,160,.8);background:rgba(94,224,160,.12)}.explain-item.selectedWrong{border-color:rgba(251,113,133,.8);background:rgba(251,113,133,.12)}.explain-label{font-weight:950;margin-bottom:3px}.meter{height:10px;border-radius:999px;overflow:hidden;background:#0c1525;border:1px solid var(--line);margin-top:10px}.meter>div{height:100%;background:var(--green);width:0%;transition:width .2s ease}.topic-list{display:grid;gap:8px;margin-top:10px}.topic-item{display:flex;justify-content:space-between;gap:10px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px 12px}.result-score{font-size:56px;font-weight:1000;letter-spacing:-.06em;line-height:.9}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--green);color:#04130c;padding:10px 14px;border-radius:999px;font-weight:900;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:20}.toast.show{opacity:1}.nav{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.dot{width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);cursor:pointer;font-weight:800}.dot.current{border-color:var(--green);color:var(--green)}.dot.answered{background:#172a46;color:var(--text)}.dot.wrongMark{background:rgba(251,113,133,.25);border-color:rgba(251,113,133,.6)}.footer-note{margin-top:14px;color:var(--muted);font-size:12px}.mini-textarea{min-height:170px}
-    @media(max-width:820px){.two,.control{grid-template-columns:1fr}.wrap{padding:12px}.hero,.card{border-radius:22px}textarea{min-height:220px}.mini-textarea{min-height:170px}.result-score{font-size:44px}}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+
+      color: var(--text);
+      background: var(--background);
+
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hazard {
+      height: 7px;
+
+      background:
+        repeating-linear-gradient(
+          135deg,
+          var(--yellow) 0 12px,
+          #111 12px 24px
+        );
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+
+      background: rgba(18, 20, 22, 0.95);
+      border-bottom: 1px solid var(--line);
+
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      max-width: 920px;
+      margin: auto;
+      padding: 14px 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .brand strong {
+      color: var(--yellow);
+
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    .brand span {
+      color: var(--muted);
+
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    nav button {
+      padding: 8px 12px;
+
+      color: var(--muted);
+      background: #171a1d;
+
+      border: 1px solid var(--line);
+      border-radius: 8px;
+
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    nav button.active {
+      color: #181300;
+      background: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    main {
+      max-width: 920px;
+      margin: auto;
+      padding: 24px 18px 70px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 9px;
+
+      font-size:
+        clamp(
+          2rem,
+          6vw,
+          3.15rem
+        );
+
+      line-height: 1.03;
+    }
+
+    h2 {
+      margin-bottom: 7px;
+      font-size: 1.3rem;
+    }
+
+    h3 {
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .eyebrow {
+      margin-bottom: 7px;
+
+      color: var(--yellow);
+
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .panel {
+      margin-bottom: 16px;
+      padding: 20px;
+
+      background: var(--panel);
+
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .hero {
+      padding: 28px 22px;
+    }
+
+    .hero p {
+      max-width: 690px;
+    }
+
+    .setup-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        );
+
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+
+      color: var(--muted);
+
+      font-size: 0.7rem;
+      font-weight: 850;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    select,
+    input,
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+
+      color: var(--text);
+      background: var(--inset);
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+
+      outline: none;
+    }
+
+    select:focus,
+    input:focus,
+    textarea:focus {
+      border-color: var(--yellow);
+    }
+
+    textarea {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    textarea.code-input {
+      min-height: 230px;
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+
+      font-size: 0.8rem;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip {
+      padding: 9px 12px;
+
+      color: var(--muted);
+      background: #121518;
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .chip.active {
+      color: #181300;
+      background: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    .count-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .count-row input {
+      width: 92px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+
+      margin-top: 18px;
+    }
+
+    .actions.primary-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+    }
+
+    .button {
+      padding: 12px 15px;
+
+      color: var(--text);
+      background: #15181b;
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+
+      font-weight: 850;
+    }
+
+    .button:hover {
+      border-color: #6d7379;
+    }
+
+    .button.primary {
+      color: #181300;
+      background: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    .button.small {
+      padding: 8px 10px;
+      font-size: 0.78rem;
+    }
+
+    .button.block {
+      width: 100%;
+    }
+
+    .button.danger {
+      color: #ff8f8c;
+      border-color: var(--red);
+    }
+
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    .route-note {
+      margin-top: 10px;
+
+      color: var(--muted);
+      font-size: 0.77rem;
+    }
+
+    .stats {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0, 1fr)
+        );
+
+      gap: 11px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      padding: 14px;
+
+      background: var(--inset);
+
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .stat strong {
+      display: block;
+
+      color: var(--yellow);
+      font-size: 1.55rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .code {
+      max-height: 540px;
+      overflow: auto;
+
+      padding: 15px;
+
+      color: #e3ded2;
+      background: #0d0f11;
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+
+      white-space: pre-wrap;
+      word-break: break-word;
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+
+      font-size: 0.78rem;
+    }
+
+    .message {
+      padding: 12px 13px;
+      margin-bottom: 14px;
+
+      background: var(--inset);
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .message.error {
+      color: #ffb4b2;
+      border-color: var(--red);
+    }
+
+    .message.success {
+      color: #c3f1c5;
+      border-color: var(--green);
+    }
+
+    .message.info {
+      border-color: var(--yellow-dark);
+    }
+
+    .progress {
+      height: 7px;
+      margin-bottom: 15px;
+
+      overflow: hidden;
+
+      background: #0d0f11;
+      border-radius: 6px;
+    }
+
+    .progress div {
+      height: 100%;
+      background: var(--yellow);
+    }
+
+    .question-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+
+      color: var(--muted);
+
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .timer {
+      color: var(--yellow);
+
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+
+      font-weight: 900;
+    }
+
+    .question-text {
+      margin: 15px 0 20px;
+
+      font-size: 1.18rem;
+      font-weight: 750;
+      line-height: 1.45;
+
+      white-space: pre-wrap;
+    }
+
+    .choices {
+      display: grid;
+      gap: 9px;
+    }
+
+    .answer-choice {
+      width: 100%;
+      padding: 13px 14px;
+
+      color: var(--text);
+      background: #111416;
+
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--line);
+      border-radius: 9px;
+
+      text-align: left;
+    }
+
+    .answer-choice.selected {
+      border-left-color: var(--yellow);
+    }
+
+    .answer-choice.correct {
+      background:
+        rgba(
+          104,
+          198,
+          107,
+          0.08
+        );
+
+      border-left-color: var(--green);
+    }
+
+    .answer-choice.wrong {
+      background:
+        rgba(
+          239,
+          83,
+          80,
+          0.08
+        );
+
+      border-left-color: var(--red);
+    }
+
+    .feedback {
+      margin-top: 16px;
+      padding: 14px;
+
+      background: #111416;
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .feedback.correct {
+      border-color: var(--green);
+    }
+
+    .feedback.wrong {
+      border-color: var(--red);
+    }
+
+    .feedback-tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+
+      border-radius: 5px;
+
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .feedback.correct .feedback-tag {
+      color: var(--green);
+
+      background:
+        rgba(
+          104,
+          198,
+          107,
+          0.14
+        );
+    }
+
+    .feedback.wrong .feedback-tag {
+      color: #ff8b88;
+
+      background:
+        rgba(
+          239,
+          83,
+          80,
+          0.14
+        );
+    }
+
+    .error-types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .error-type {
+      padding: 8px 11px;
+
+      color: var(--muted);
+      background: #111416;
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+
+      font-size: 0.75rem;
+    }
+
+    .error-type.active {
+      color: #181300;
+      background: var(--yellow);
+      border-color: var(--yellow);
+
+      font-weight: 900;
+    }
+
+    .pill {
+      display: inline-block;
+
+      margin: 3px 4px 3px 0;
+      padding: 4px 8px;
+
+      color: var(--muted);
+
+      border: 1px solid var(--line);
+      border-radius: 999px;
+
+      font-size: 0.68rem;
+    }
+
+    .session {
+      margin-bottom: 9px;
+      padding: 13px;
+
+      background: var(--inset);
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .session-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .session small {
+      color: var(--muted);
+    }
+
+    .route-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        );
+
+      gap: 10px;
+    }
+
+    .route-card {
+      padding: 13px;
+
+      background: var(--inset);
+
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+
+    .route-card input {
+      margin-top: 8px;
+    }
+
+    .empty {
+      padding: 28px;
+
+      color: var(--muted);
+
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+
+      text-align: center;
+    }
+
+    .footer {
+      padding: 22px 10px 5px;
+
+      color: var(--muted);
+
+      font-size: 0.7rem;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      nav button {
+        flex: 1;
+        white-space: nowrap;
+      }
+
+      .actions.primary-grid,
+      .setup-grid,
+      .stats,
+      .route-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <header class="hero"><div class="row"><div><h1>ASAT Quiz Frontend</h1><p>NotebookLM is the backend. This page is the offline quiz front-end: copy prompt, paste JSON, answer, then send growth prompt back. Now with a “where did I leave off?” prompt because memory is a scam.</p></div><span class="pill">offline HTML</span></div></header>
+  <div class="hazard"></div>
 
-    <section id="setup" class="grid">
-      <div class="card"><div class="grid control"><label>Subject<select id="subjectSelect"></select></label><label>Questions<input id="questionCount" type="number" min="3" max="100" value="50" /></label></div><p id="subjectMeta" class="small"></p></div>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <strong>DBD</strong>
 
-      <div class="grid two">
-        <div class="card">
-          <div class="row"><h2>1. Copy this to NotebookLM</h2><button class="btn" id="copyPrompt">Copy</button></div>
-          <textarea id="promptBox" readonly></textarea>
-          <div class="footer-note">Main quiz prompt. It asks for A–E options and explanations for every option.</div>
-          <div class="row" style="margin-top:16px"><h2>1b. Ask NotebookLM where you left off</h2><button class="btn secondary" id="copyResume">Copy</button></div>
-          <textarea id="resumeBox" class="mini-textarea" readonly></textarea>
-          <div class="footer-note">Use this when NotebookLM already has your quiz history, answers, scores, and weak areas.</div>
-        </div>
-
-        <div class="card">
-          <div class="row"><h2>2. Paste NotebookLM JSON here</h2><button class="btn ghost" id="clearInput">Clear</button></div>
-          <textarea id="jsonInput" placeholder="Paste the JSON quiz from NotebookLM here..."></textarea>
-          <div class="prompt-actions"><button class="btn" id="loadQuiz">Load Quiz</button></div>
-          <p id="parseError" class="small" style="color:var(--red)"></p>
-        </div>
+        <span>
+          Drill Baby Drill · Gazali Edition
+        </span>
       </div>
-    </section>
 
-    <section id="quiz" class="card hidden"><div class="row"><div><span id="quizMeta" class="pill"></span><div class="meter"><div id="progressBar"></div></div></div><div class="prompt-actions"><button class="btn secondary" id="finishBtn">Finish</button><button class="btn ghost" id="resetBtn">Reset</button></div></div><div id="questionText" class="question"></div><div id="options" class="options"></div><div id="feedback" class="feedback hidden"></div><div class="prompt-actions"><button class="btn secondary" id="prevBtn">Prev</button><button class="btn" id="nextBtn">Next</button></div><div id="questionNav" class="nav"></div></section>
+      <nav id="navigation"></nav>
+    </div>
+  </header>
 
-    <section id="results" class="grid hidden"><div class="card"><div class="row"><div><div id="scoreText" class="result-score">0/0</div><p id="percentText" class="small"></p></div><div class="prompt-actions"><button class="btn secondary" id="reviewWrongBtn">Review wrong</button><button class="btn ghost" id="newQuizBtn">New quiz</button></div></div></div><div class="grid two"><div class="card"><h2>Weak topics</h2><div id="weakTopics" class="topic-list"></div></div><div class="card"><div class="row"><h2>3. Copy this back to NotebookLM</h2><button class="btn" id="copyGrowth">Copy</button></div><textarea id="growthBox" readonly></textarea></div></div></section>
-  </div>
-  <div id="toast" class="toast">Copied</div>
+  <main id="application"></main>
 
   <script>
-    const SUBJECTS=[
-      {id:"sejarah",name:"Sejarah Indonesia",emoji:"🕌",exam:"3 Jun",count:50,material:"Kebudayaan Islam di Nusantara: masuknya Islam, akulturasi budaya, teori masuknya Islam, kerajaan Samudera Pasai, Aceh, Gowa-Tallo, Demak, Banten, Cirebon, dan Mataram Islam.",promptExtra:"Prioritize chronology, theory comparison, kingdom characteristics, cause-effect, and cultural acculturation. Avoid trivial date memorization unless the source emphasizes it."},
-      {id:"quran",name:"Pendidikan Qur’an",emoji:"📖",exam:"3 Jun",count:30,material:"Hafalan QS. Nuh dan Bab 8–10.",promptExtra:"Use recall-check style questions, meaning questions, sequence/memorization checks, and concept checks. Include some questions that test common hafalan mistakes."},
-      {id:"informatika",name:"Informatika",emoji:"💻",exam:"4 Jun",count:35,material:"Etika dan Budaya Digital Indonesia, Keamanan Digital.",promptExtra:"Use scenario-based questions about digital ethics, privacy, security, passwords, data protection, cyberbullying, misinformation, and responsible digital behavior."},
-      {id:"ppkn",name:"Pendidikan Pancasila",emoji:"🇮🇩",exam:"5 Jun",count:40,material:"Peran, hak, kewajiban warga negara sesuai kisi-kisi.",promptExtra:"Make questions about applying rights, obligations, and civic roles to real situations. Include confusing pairs like hak vs kewajiban."},
-      {id:"arabic",name:"Bahasa Arab",emoji:"✍️",exam:"8 Jun",count:20,material:"Bab 7 dan 8 buku MKBM dan Digital.",promptExtra:"Mix vocabulary, qawaid, qiraah comprehension, and sentence meaning. Keep Arabic text clear and aligned with the source."},
-      {id:"biology",name:"Biologi",emoji:"🍄",exam:"8 Jun",count:35,material:"Fungi dan Ekosistem.",promptExtra:"Ask concept/process questions. For fungi, emphasize characteristics, classification, reproduction, and roles. For ecosystems, emphasize food chains/webs, interactions, energy flow, and cycles."},
-      {id:"geography",name:"Geografi",emoji:"🌍",exam:"8 Jun",count:35,material:"Bab Litosfer, Bab Atmosfer, Bab Hidrosfer.",promptExtra:"Make concept and application questions. Include processes, layers, phenomena, causes, impacts, and examples in Indonesia where sources support it."},
-      {id:"pai",name:"Pendidikan Agama Islam",emoji:"🕌",exam:"9 Jun",count:35,material:"Adab berpakaian, bepergian, bertamu, dan tokoh ulama di Indonesia/Wali Songo.",promptExtra:"Mix definition, example, adab application, and Wali Songo identification/contribution questions."},
-      {id:"economy",name:"Ekonomi",emoji:"🏦",exam:"9 Jun",count:35,material:"Sistem dan alat pembayaran, OJK, Bank, LKBB.",promptExtra:"Emphasize concepts, functions, institutions, differences between bank/LKBB/OJK, payment systems, and real-life financial scenarios."},
-      {id:"english",name:"Bahasa Inggris",emoji:"📝",exam:"10 Jun",count:30,material:"Future continuous, future perfect, gerund/infinitive, I wish/If only + Past Perfect, expository and narrative text.",promptExtra:"Make grammar trap questions and reading comprehension questions. Include distractors that test tense, verb pattern, and meaning."},
-      {id:"math",name:"Matematika",emoji:"📊",exam:"10 Jun",count:8,material:"Persamaan Kuadrat, Fungsi Kuadrat, Perbandingan Trigonometri, Statistika.",promptExtra:"This is pen-paper. Make fewer questions. Require step-by-step reasoning. Include known/asked/formula hints in explanations. For each option, explain the likely mistake behind wrong answers."},
-      {id:"indo",name:"Bahasa Indonesia",emoji:"📖",exam:"11 Jun",count:30,material:"Negosiasi, Biografi, Puisi: ciri-ciri, struktur, fitur kebahasaan.",promptExtra:"Make text-analysis questions. Test structure, features, meaning, purpose, and language markers. Include plausible distractors."},
-      {id:"chemistry",name:"Kimia",emoji:"🧪",exam:"11 Jun",count:8,material:"Tatanama senyawa, persamaan reaksi, stoikiometri.",promptExtra:"This is pen-paper. Make fewer questions. Require balanced reactions, units, mole ratios, and naming logic. Explain the likely calculation/concept error behind each wrong option."},
-      {id:"sociology",name:"Sosiologi",emoji:"🧠",exam:"12 Jun",count:45,material:"Lembaga sosial, nilai norma sosial, sosialisasi, perilaku menyimpang, pengendalian sosial, rancangan penelitian sosial, pengumpulan data, pengolahan data, penulisan laporan penelitian sosial.",promptExtra:"Prioritize concept-to-example questions, research method questions, and distinctions between similar terms."},
-      {id:"physics",name:"Fisika",emoji:"⚡",exam:"12 Jun",count:8,material:"Pemanasan Global dan Energi Terbarukan.",promptExtra:"Mix concept and pen-paper reasoning. Include cause-effect, energy source comparison, and any formula/unit questions if present in the source. Explain wrong options clearly."}
+    const APP_VERSION = "0.7";
+
+    const STORAGE_KEY =
+      "dbd_gazali";
+
+    const SUBJECTS = [
+      {
+        id: "chemistry",
+        campaign: "School",
+        name: "Kimia",
+        chatLabel: "Kimia chat"
+      },
+
+      {
+        id: "physics",
+        campaign: "School",
+        name: "Fisika",
+        chatLabel: "Fisika chat"
+      },
+
+      {
+        id: "matwa",
+        campaign: "School",
+        name: "Matematika Wajib",
+        chatLabel:
+          "Matematika Wajib chat"
+      },
+
+      {
+        id: "matlan",
+        campaign: "School",
+        name:
+          "Matematika Tingkat Lanjut",
+        chatLabel:
+          "Matematika Tingkat Lanjut chat"
+      },
+
+      {
+        id: "indonesian",
+        campaign: "School",
+        name: "Bahasa Indonesia",
+        chatLabel:
+          "Bahasa Indonesia chat"
+      },
+
+      {
+        id: "sat-math",
+        campaign: "SAT",
+        name: "SAT Math",
+        chatLabel: "SAT chat"
+      },
+
+      {
+        id: "sat-rw",
+        campaign: "SAT",
+        name:
+          "SAT Reading & Writing",
+        chatLabel: "SAT chat"
+      },
+
+      {
+        id: "osn-geography",
+        campaign: "OSN Geografi",
+        name: "OSN Geografi",
+        chatLabel:
+          "OSN Geografi chat"
+      },
+
+      {
+        id: "other-school",
+        campaign: "School",
+        name:
+          "Other School Subject",
+        chatLabel:
+          "relevant school subject chat"
+      },
+
+      {
+        id: "custom",
+        campaign: "Custom",
+        name: "Custom",
+        chatLabel: "current chat"
+      }
     ];
-    let state={subject:SUBJECTS[0],questions:[],current:0,answers:{}}; const $=id=>document.getElementById(id);
-    function toast(msg="Copied"){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1000)}
-    async function copyText(text){try{await navigator.clipboard.writeText(text)}catch{const tmp=document.createElement("textarea");tmp.value=text;document.body.appendChild(tmp);tmp.select();document.execCommand("copy");tmp.remove()}toast("Copied")}
-    function selectedSubject(){return SUBJECTS.find(s=>s.id===$("subjectSelect").value)||SUBJECTS[0]}
-    function buildPrompt(subject,count){return `Create an ASAT quiz from ONLY the uploaded sources in this NotebookLM notebook.\n\nSubject: ${subject.name}\nExam date: ${subject.exam}\nMaterial focus: ${subject.material}\nSubject-specific instruction: ${subject.promptExtra}\n\nReturn ONLY valid JSON. No markdown. No extra text.\n\nJSON format:\n[\n  {\n    "question": "...",\n    "options": [\n      { "text": "A option", "explanation": "Explain why A is correct or incorrect." },\n      { "text": "B option", "explanation": "Explain why B is correct or incorrect." },\n      { "text": "C option", "explanation": "Explain why C is correct or incorrect." },\n      { "text": "D option", "explanation": "Explain why D is correct or incorrect." },\n      { "text": "E option", "explanation": "Explain why E is correct or incorrect." }\n    ],\n    "answerIndex": 0,\n    "topic": "specific topic label",\n    "overallExplanation": "Briefly explain the correct logic in 2-4 sentences."\n  }\n]\n\nRules:\n1. Make exactly ${count} questions.\n2. Every question must have exactly 5 choices: A, B, C, D, E.\n3. Use exam-style questions, not lazy trivia.\n4. Label every question with a specific topic.\n5. Put the correct answer as answerIndex, using 0 for A, 1 for B, 2 for C, 3 for D, 4 for E.\n6. For every option, explain why that option is correct or incorrect.\n7. The wrong-option explanations should identify the misconception, trap, or reason the option fails.\n8. The correct-option explanation should explain why it is the best answer.\n9. Keep it concise but not shallow.\n10. Use Indonesian unless the subject itself is English or Arabic.`}
-    function buildResumePrompt(subject){return `Look at this NotebookLM notebook's existing chat/context, previous quizzes, my pasted quiz results, wrong answers, weak-area analyses, and any earlier JSON quizzes.\n\nSubject I am focusing on right now: ${subject.name}\nExam date: ${subject.exam}\nMaterial focus: ${subject.material}\n\nTell me exactly where I left off.\n\nReturn:\n1. The latest quiz/result you can infer for this subject.\n2. My current weak topics.\n3. What I have already practiced enough.\n4. What I should practice next.\n5. The next best 20-minute task.\n6. If useful, create the next quiz in the same JSON format: 5 options A-E, answerIndex 0-4, topic label, overallExplanation, and an explanation for every option.\n\nBe practical. Don't restart from zero unless there is no usable history.`}
-    function updatePrompt(){const s=selectedSubject();state.subject=s;$("questionCount").value=$("questionCount").value||s.count;$("subjectMeta").textContent=`${s.emoji} ${s.name} • Exam: ${s.exam} • ${s.material}`;$("promptBox").value=buildPrompt(s,$("questionCount").value||s.count);$("resumeBox").value=buildResumePrompt(s)}
-    function cleanJson(text){let t=text.trim().replace(/^```json\s*/i,"").replace(/^```\s*/i,"").replace(/```$/i,"").trim();const a=t.indexOf("["),b=t.lastIndexOf("]");if(a!==-1&&b!==-1&&b>a)t=t.slice(a,b+1);return t}
-    function normalizeOptions(options,exps=[]){if(!Array.isArray(options))return[];return options.map((opt,i)=>typeof opt==="object"&&opt!==null?{text:opt.text??opt.option??opt.answer??String(opt),explanation:opt.explanation??opt.reason??exps[i]??"No explanation for this option."}:{text:String(opt),explanation:exps[i]??"No explanation for this option."})}
-    function normalizeQuestions(raw){const arr=Array.isArray(raw)?raw:raw.questions;if(!Array.isArray(arr))throw new Error("Quiz must be a JSON array or an object with a questions array.");return arr.map((q,i)=>{let answerIndex=q.answerIndex;if(answerIndex===undefined&&q.answer!==undefined)answerIndex=q.answer;if(typeof answerIndex==="string"){const map={A:0,B:1,C:2,D:3,E:4,a:0,b:1,c:2,d:3,e:4};answerIndex=map[answerIndex]??Number(answerIndex)}const options=normalizeOptions(q.options||[],q.optionExplanations||q.explanations||[]);return{id:q.id||i+1,question:q.question||q.q||`Question ${i+1}`,options,answerIndex:Number.isInteger(answerIndex)?answerIndex:Number(answerIndex||0),topic:q.topic||"unknown",overallExplanation:q.overallExplanation||q.explanation||q.explain||"No overall explanation given."}}).filter(q=>q.question&&q.options.length>=2)}
-    function loadQuizFromInput(){try{$("parseError").textContent="";const parsed=JSON.parse(cleanJson($("jsonInput").value));const questions=normalizeQuestions(parsed);if(!questions.length)throw new Error("No valid questions found.");state.questions=questions;state.current=0;state.answers={};$("setup").classList.add("hidden");$("results").classList.add("hidden");$("quiz").classList.remove("hidden");renderQuestion()}catch(e){$("parseError").textContent=e.message||"Could not parse quiz. Ask NotebookLM for valid JSON only."}}
-    function answerQuestion(index){const q=state.questions[state.current];state.answers[q.id]={number:state.current+1,question:q.question,selectedIndex:index,selected:q.options[index]?.text,correctIndex:q.answerIndex,correctAnswer:q.options[q.answerIndex]?.text,correct:index===q.answerIndex,topic:q.topic,overallExplanation:q.overallExplanation,options:q.options};renderQuestion()}
-    function renderQuestion(){const q=state.questions[state.current],answered=state.answers[q.id],total=state.questions.length,done=Object.keys(state.answers).length;$("quizMeta").textContent=`${state.subject.emoji} ${state.subject.name} • ${state.current+1}/${total} • ${q.topic}`;$("progressBar").style.width=`${Math.round(done/total*100)}%`;$("questionText").textContent=q.question;$("options").innerHTML="";q.options.forEach((opt,i)=>{const btn=document.createElement("button");btn.className="option";btn.innerHTML=`<b>${String.fromCharCode(65+i)}.</b> ${escapeHtml(opt.text)}`;if(answered){if(i===q.answerIndex)btn.classList.add("correct");if(i===answered.selectedIndex&&i!==q.answerIndex)btn.classList.add("wrong")}btn.onclick=()=>{if(!answered)answerQuestion(i)};$("options").appendChild(btn)});if(answered){$("feedback").classList.remove("hidden");$("feedback").innerHTML=buildFeedbackHtml(q,answered)}else{$("feedback").classList.add("hidden");$("feedback").innerHTML=""}renderNav()}
-    function buildFeedbackHtml(q,answered){const verdict=answered.correct?"Correct.":"Wrong. Good, now we found the leak.",correctLetter=String.fromCharCode(65+q.answerIndex),selectedLetter=String.fromCharCode(65+answered.selectedIndex);const rows=q.options.map((opt,i)=>{const letter=String.fromCharCode(65+i),classes=["explain-item",i===q.answerIndex?"correct":"",i===answered.selectedIndex&&i!==q.answerIndex?"selectedWrong":""].join(" ");let tag=i===q.answerIndex?"Correct answer":i===answered.selectedIndex?"Your answer":"Wrong option";return`<div class="${classes}"><div class="explain-label">${letter}. ${escapeHtml(opt.text)} <span class="small">• ${tag}</span></div><div class="small">${escapeHtml(opt.explanation||"No explanation for this option.")}</div></div>`}).join("");return`<b>${verdict}</b><div class="small" style="margin-top:4px;">You chose ${selectedLetter}. Correct answer: ${correctLetter}.</div><p>${escapeHtml(q.overallExplanation||"")}</p><div class="explain-grid">${rows}</div>`}
-    function renderNav(){$("questionNav").innerHTML="";state.questions.forEach((q,i)=>{const btn=document.createElement("button");btn.className="dot";btn.textContent=i+1;if(i===state.current)btn.classList.add("current");if(state.answers[q.id])btn.classList.add("answered");if(state.answers[q.id]&&!state.answers[q.id].correct)btn.classList.add("wrongMark");btn.onclick=()=>{state.current=i;renderQuestion()};$("questionNav").appendChild(btn)})}
-    function nextQuestion(){if(state.current+1>=state.questions.length)showResults();else{state.current++;renderQuestion()}}function prevQuestion(){if(state.current>0){state.current--;renderQuestion()}}
-    function allAnswers(){return state.questions.map(q=>state.answers[q.id]).filter(Boolean)}
-    function showResults(){const answers=allAnswers(),score=answers.filter(a=>a.correct).length,total=state.questions.length,wrong=answers.filter(a=>!a.correct);$("quiz").classList.add("hidden");$("results").classList.remove("hidden");$("scoreText").textContent=`${score}/${total}`;$("percentText").textContent=`${Math.round(score/Math.max(total,1)*100)}% score • ${wrong.length} wrong`;const topicMap={};wrong.forEach(w=>{topicMap[w.topic]=(topicMap[w.topic]||0)+1});const topics=Object.entries(topicMap).sort((a,b)=>b[1]-a[1]);$("weakTopics").innerHTML=topics.length?topics.map(([topic,n])=>`<div class="topic-item"><span>${escapeHtml(topic)}</span><b>${n} wrong</b></div>`).join(""):`<p class="small" style="color:var(--green)">No weak topics. Suspiciously powerful behavior.</p>`;$("growthBox").value=buildGrowthPrompt(score,total,wrong)}
-    function buildGrowthPrompt(score,total,wrong){return`Analyze my ASAT quiz result using the uploaded sources in NotebookLM.\n\nSubject: ${state.subject.name}\nMaterial focus: ${state.subject.material}\nScore: ${score}/${total}\n\nWrong answers:\n${wrong.map(w=>`- Q${w.number} | Topic: ${w.topic} | Question: ${w.question} | My answer: ${w.selected} | Correct answer: ${w.correctAnswer}`).join("\n")||"None"}\n\nDo this:\n1. Identify my top weak topics.\n2. Explain my mistake patterns.\n3. Tell me what to review first.\n4. Create a 20-question weak-area drill in the SAME JSON format as before.\n5. Every new question must have 5 choices: A, B, C, D, E.\n6. For every option, explain why it is correct or incorrect.\n7. Keep it source-based and exam-style.\n8. Return the new JSON quiz after the analysis section.`}
-    function reviewWrong(){const wrongIds=new Set(allAnswers().filter(a=>!a.correct).map(a=>state.questions.find(q=>q.question===a.question)?.id));const wrongQs=state.questions.filter(q=>wrongIds.has(q.id));if(!wrongQs.length)return;state.questions=wrongQs;state.current=0;state.answers={};$("results").classList.add("hidden");$("quiz").classList.remove("hidden");renderQuestion()}function resetToSetup(){state.questions=[];state.current=0;state.answers={};$("quiz").classList.add("hidden");$("results").classList.add("hidden");$("setup").classList.remove("hidden")}function resetQuiz(){state.current=0;state.answers={};renderQuestion()}function escapeHtml(str){return String(str??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-    function init(){const select=$("subjectSelect");SUBJECTS.forEach(s=>{const opt=document.createElement("option");opt.value=s.id;opt.textContent=`${s.emoji} ${s.name} • ${s.exam}`;select.appendChild(opt)});$("subjectSelect").addEventListener("change",()=>{const s=selectedSubject();$("questionCount").value=s.count;updatePrompt()});$("questionCount").addEventListener("input",updatePrompt);$("copyPrompt").onclick=()=>copyText($("promptBox").value);$("copyResume").onclick=()=>copyText($("resumeBox").value);$("loadQuiz").onclick=loadQuizFromInput;$("clearInput").onclick=()=>{$("jsonInput").value="";$("parseError").textContent=""};$("nextBtn").onclick=nextQuestion;$("prevBtn").onclick=prevQuestion;$("finishBtn").onclick=showResults;$("resetBtn").onclick=resetQuiz;$("newQuizBtn").onclick=resetToSetup;$("reviewWrongBtn").onclick=reviewWrong;$("copyGrowth").onclick=()=>copyText($("growthBox").value);updatePrompt()}init();
+
+    const MODES = [
+      {
+        id: "coverage",
+        label: "Coverage Scan",
+
+        description:
+          "Sample broadly to expose what is known, shaky, and unknown."
+      },
+
+      {
+        id: "depth",
+        label: "Deep Practice",
+
+        description:
+          "Use reasoning, calculations, interpretation, and transfer—not shallow recognition."
+      },
+
+      {
+        id: "repair",
+        label: "Repair Drill",
+
+        description:
+          "Target previous mistakes with fresh variants until the weakness is actually repaired."
+      }
+    ];
+
+    const DIFFICULTIES = [
+      "Easy",
+      "Medium",
+      "Difficult",
+      "Adaptive"
+    ];
+
+    const COUNT_PRESETS = [
+      5,
+      10,
+      15,
+      20,
+      25
+    ];
+
+    const ERROR_TYPES = [
+      [
+        "concept",
+        "Did not know"
+      ],
+
+      [
+        "formula",
+        "Forgot rule/formula"
+      ],
+
+      [
+        "method",
+        "Wrong method"
+      ],
+
+      [
+        "execution",
+        "Execution/calculation"
+      ],
+
+      [
+        "misread",
+        "Misread"
+      ],
+
+      [
+        "careless",
+        "Careless/rushed"
+      ],
+
+      [
+        "guess",
+        "Guessed"
+      ],
+
+      [
+        "focus",
+        "Lost focus"
+      ],
+
+      [
+        "bad-question",
+        "Bad question"
+      ]
+    ];
+
+    function createEmptyData() {
+      return {
+        appVersion:
+          APP_VERSION,
+
+        profile: {
+          name:
+            "Gazali Darmawan",
+
+          grade:
+            "Grade 11",
+
+          className:
+            "Science 2"
+        },
+
+        setup: {
+          subjectId:
+            "chemistry",
+
+          mode:
+            "coverage",
+
+          count:
+            10,
+
+          difficulty:
+            "Adaptive",
+
+          focus:
+            ""
+        },
+
+        statistics: {
+          answered:
+            0,
+
+          correct:
+            0,
+
+          wrong:
+            0
+        },
+
+        completedSessions:
+          [],
+
+        activeSession:
+          null,
+
+        settings: {
+          persistentStorageGranted:
+            false,
+
+          chatRoutes:
+            {}
+        }
+      };
+    }
+
+    function migrateLegacyData() {
+      if (
+        localStorage.getItem(
+          STORAGE_KEY
+        )
+      ) {
+        return;
+      }
+
+      const next =
+        createEmptyData();
+
+      const sessionKeys = [
+        "dbd_gazali_sessions_v05",
+        "dbd_gazali_sessions_v5"
+      ];
+
+      const activeKeys = [
+        "dbd_gazali_active_v05",
+        "dbd_gazali_active_v5"
+      ];
+
+      const statisticKeys = [
+        "dbd_gazali_statistics_v05",
+        "dbd_gazali_stats_v05",
+        "dbd_gazali_statistics_v5",
+        "dbd_gazali_stats_v5"
+      ];
+
+      for (
+        const key
+        of sessionKeys
+      ) {
+        try {
+          const parsed =
+            JSON.parse(
+              localStorage.getItem(
+                key
+              ) || "null"
+            );
+
+          if (
+            Array.isArray(
+              parsed
+            )
+          ) {
+            next.completedSessions =
+              parsed;
+
+            break;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      for (
+        const key
+        of activeKeys
+      ) {
+        try {
+          const parsed =
+            JSON.parse(
+              localStorage.getItem(
+                key
+              ) || "null"
+            );
+
+          if (parsed) {
+            next.activeSession =
+              parsed;
+
+            break;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      for (
+        const key
+        of statisticKeys
+      ) {
+        try {
+          const parsed =
+            JSON.parse(
+              localStorage.getItem(
+                key
+              ) || "null"
+            );
+
+          if (parsed) {
+            next.statistics = {
+              ...next.statistics,
+              ...parsed
+            };
+
+            break;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(next)
+      );
+    }
+
+    function loadData() {
+      try {
+        const defaults =
+          createEmptyData();
+
+        const stored =
+          JSON.parse(
+            localStorage.getItem(
+              STORAGE_KEY
+            ) || "{}"
+          );
+
+        return {
+          ...defaults,
+          ...stored,
+
+          appVersion:
+            APP_VERSION,
+
+          profile:
+            defaults.profile,
+
+          setup: {
+            ...defaults.setup,
+            ...(
+              stored.setup ||
+              {}
+            )
+          },
+
+          statistics: {
+            ...defaults.statistics,
+            ...(
+              stored.statistics ||
+              {}
+            )
+          },
+
+          completedSessions:
+            Array.isArray(
+              stored.completedSessions
+            )
+              ? stored.completedSessions
+              : [],
+
+          settings: {
+            ...defaults.settings,
+            ...(
+              stored.settings ||
+              {}
+            ),
+
+            chatRoutes: {
+              ...defaults
+                .settings
+                .chatRoutes,
+
+              ...(
+                stored.settings
+                  ?.chatRoutes ||
+                {}
+              )
+            }
+          }
+        };
+      } catch (error) {
+        console.error(error);
+
+        return createEmptyData();
+      }
+    }
+
+    migrateLegacyData();
+
+    let DATA =
+      loadData();
+
+    let currentView =
+      "home";
+
+    let currentPrompt =
+      "";
+
+    let currentPromptTitle =
+      "";
+
+    let currentSessionId =
+      null;
+
+    let importError =
+      "";
+
+    let timerInterval =
+      null;
+
+    if (
+      DATA.activeSession &&
+      !DATA.activeSession.locked
+    ) {
+      DATA
+        .activeSession
+        .questionStarted =
+          Date.now();
+
+      DATA
+        .activeSession
+        .questionElapsed =
+          0;
+
+      saveData();
+    }
+
+    function saveData() {
+      DATA.appVersion =
+        APP_VERSION;
+
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(DATA)
+      );
+    }
+
+    function escapeHTML(value) {
+      return String(
+        value ?? ""
+      ).replace(
+        /[&<>"']/g,
+
+        character => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[character]
+      );
+    }
+
+    function normalizeAnswer(value) {
+      return String(
+        value ?? ""
+      )
+        .trim()
+        .toLowerCase()
+        .replace(
+          /\s+/g,
+          " "
+        );
+    }
+
+    function formatDuration(
+      seconds
+    ) {
+      const rounded =
+        Math.max(
+          0,
+          Math.round(
+            seconds || 0
+          )
+        );
+
+      const minutes =
+        Math.floor(
+          rounded / 60
+        );
+
+      const remaining =
+        String(
+          rounded % 60
+        ).padStart(
+          2,
+          "0"
+        );
+
+      return (
+        `${minutes}:` +
+        remaining
+      );
+    }
+
+    function findSubject(
+      subjectId
+    ) {
+      return (
+        SUBJECTS.find(
+          subject =>
+            subject.id ===
+            subjectId
+        ) ||
+        SUBJECTS[0]
+      );
+    }
+
+    function findMode(
+      modeId
+    ) {
+      return (
+        MODES.find(
+          mode =>
+            mode.id ===
+            modeId
+        ) ||
+        MODES[0]
+      );
+    }
+
+    function getErrorLabel(
+      errorId
+    ) {
+      return (
+        ERROR_TYPES.find(
+          item =>
+            item[0] ===
+            errorId
+        )?.[1] ||
+        errorId
+      );
+    }
+
+    function route(view) {
+      currentView =
+        view;
+
+      stopTimer();
+      render();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(
+          timerInterval
+        );
+
+        timerInterval =
+          null;
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+
+      timerInterval =
+        setInterval(() => {
+          const active =
+            DATA.activeSession;
+
+          if (
+            active &&
+            currentView ===
+              "drill" &&
+            !active.locked
+          ) {
+            active.questionElapsed =
+              (
+                Date.now() -
+                active.questionStarted
+              ) / 1000;
+
+            const element =
+              document.getElementById(
+                "timer"
+              );
+
+            if (element) {
+              element.textContent =
+                formatDuration(
+                  active.questionElapsed
+                );
+            }
+          }
+        }, 500);
+    }
+
+    function renderNavigation() {
+      const items = [
+        [
+          "home",
+          "Drill"
+        ],
+
+        [
+          "history",
+          "History"
+        ],
+
+        [
+          "data",
+          "Data"
+        ]
+      ];
+
+      document.getElementById(
+        "navigation"
+      ).innerHTML =
+        items
+          .map(
+            ([view, label]) => `
+              <button
+                class="${
+                  currentView === view
+                    ? "active"
+                    : ""
+                }"
+
+                onclick="
+                  route('${view}')
+                "
+              >
+                ${label}
+              </button>
+            `
+          )
+          .join("");
+    }
+
+    function updateSetup(
+      key,
+      value
+    ) {
+      if (
+        key === "count"
+      ) {
+        value =
+          Math.max(
+            1,
+            Math.min(
+              50,
+              parseInt(
+                value,
+                10
+              ) || 10
+            )
+          );
+      }
+
+      DATA.setup[key] =
+        value;
+
+      saveData();
+      render();
+    }
+
+    function findLatestSession(
+      subjectName
+    ) {
+      return (
+        DATA
+          .completedSessions
+          .find(
+            session =>
+              session.subject ===
+              subjectName
+          ) ||
+        null
+      );
+    }
+
+    function createModeInstruction(
+      mode
+    ) {
+      if (
+        mode.id ===
+        "coverage"
+      ) {
+        return `
+Coverage Scan rules:
+
+- Sample the selected material broadly.
+- Spread questions across different concepts instead of repeatedly testing one detail.
+- Prefer concise questions that reveal whether a concept is known, shaky, or unknown.
+- The packet should diagnose breadth.
+- Do not create the illusion of mastery through repetitive questions.
+        `.trim();
+      }
+
+      if (
+        mode.id ===
+        "depth"
+      ) {
+        return `
+Deep Practice rules:
+
+- Prioritize reasoning, calculations, interpretation, comparison, explanation, and transfer.
+- Avoid shallow recognition questions unless they are required as a foundation.
+- For quantitative subjects, require actual working.
+- Use multi-step or non-obvious applications where appropriate.
+- Test whether I can independently use the material.
+        `.trim();
+      }
+
+      return `
+Repair Drill rules:
+
+- Use my previous DBD evidence and unresolved mistakes.
+- Test the same underlying weaknesses using fresh wording, values, examples, data, maps, or passages.
+- Do not copy the original failed questions.
+- A mistake is repaired only when I can solve new variants independently.
+      `.trim();
+    }
+
+    function createDifficultyInstruction(
+      difficulty
+    ) {
+      if (
+        difficulty ===
+        "Easy"
+      ) {
+        return (
+          "Use foundations, direct applications, and clear wording."
+        );
+      }
+
+      if (
+        difficulty ===
+        "Medium"
+      ) {
+        return (
+          "Use standard school or exam-level applications with plausible traps."
+        );
+      }
+
+      if (
+        difficulty ===
+        "Difficult"
+      ) {
+        return (
+          "Use less obvious methods, transfer, multi-step reasoning, and tempting but defensible distractors."
+        );
+      }
+
+      return `
+Use an adaptive mixture that locates my current boundary.
+
+A reasonable initial distribution is:
+
+- 25% easy;
+- 50% medium;
+- 25% difficult.
+
+Adjust that balance using evidence from this subject chat.
+      `.trim();
+    }
+
+    function createChatRequest() {
+      const subject =
+        findSubject(
+          DATA.setup.subjectId
+        );
+
+      const mode =
+        findMode(
+          DATA.setup.mode
+        );
+
+      const count =
+        DATA.setup.count;
+
+      const difficulty =
+        DATA.setup.difficulty;
+
+      const focus =
+        DATA.setup.focus.trim()
+        ||
+        "None. Use the subject chat's evidence to propose the material scope.";
+
+      const previous =
+        findLatestSession(
+          subject.name
+        );
+
+      const previousReport =
+        (
+          mode.id === "repair" &&
+          previous
+        )
+          ? `
+Here is the latest DBD report available for this subject:
+
+${createSessionReport(previous)}
+          `.trim()
+          : "";
+
+      return `
+I want to prepare a DBD v0.7 drill.
+
+Configuration:
+
+- Subject: ${subject.name}
+- Campaign: ${subject.campaign}
+- Mode: ${mode.label}
+- Number of questions: ${count}
+- Difficulty: ${difficulty}
+- Additional focus: ${focus}
+
+Do not generate the JSON packet yet.
+
+First perform a context check using:
+
+- the files available in this subject chat;
+- the latest conversation;
+- the material I have recently studied;
+- work I have already completed;
+- unresolved confusion and mistakes;
+- previous DBD reports in this chat;
+- known assignments, tests, or exam context.
+
+Then ask me exactly one material-selection question.
+
+Your first reply must:
+
+1. Present 3–6 concrete material scopes based on this actual chat.
+2. Name specific files, sections, recent lessons, weak areas, or cumulative ranges when the chat supports them.
+3. Include a custom-scope option.
+4. Briefly recommend one option and explain why.
+5. Wait for my selection.
+
+Do not silently choose the chapter.
+
+Do not provide generic chapter options unsupported by this chat.
+
+Do not output JSON in the first reply.
+
+After I select the material, generate the packet immediately unless my selection is genuinely ambiguous.
+
+${createModeInstruction(mode)}
+
+Difficulty instruction:
+
+${createDifficultyInstruction(difficulty)}
+
+After my material selection, return ONLY valid JSON with exactly ${count} questions.
+
+Do not use markdown.
+
+Do not use code fences.
+
+Do not write commentary before or after the JSON.
+
+Use this schema:
+
+{
+  "dbd_version": "0.7",
+  "campaign": "${subject.campaign}",
+  "subject": "${subject.name}",
+  "topic": "The material scope I selected",
+  "source": "Exact files, pages, test, lesson, or conversation basis",
+  "mode": "${mode.id}",
+  "difficulty": "${difficulty}",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq | short | numeric | self_check",
+      "prompt": "Question text",
+      "choices": {
+        "A": "Option A",
+        "B": "Option B",
+        "C": "Option C",
+        "D": "Option D"
+      },
+      "answer": "A or the expected response",
+      "accepted_answers": [
+        "Optional alternative valid response"
+      ],
+      "tolerance": 0,
+      "explanation": "Brief post-answer explanation",
+      "why_wrong": {
+        "B": "Specific misconception or trap represented by B"
+      },
+      "tags": [
+        "specific skill",
+        "specific subtopic"
+      ],
+      "difficulty": "easy | medium | hard"
+    }
+  ]
+}
+
+Packet rules:
+
+- Every question must be supported by the selected material, prior teaching, or the explicit exam framework.
+- For calculation questions, use fresh problems requiring actual working.
+- Keep explanations concise because DBD is the execution layer, not the teaching conversation.
+- Use self_check only when automatic grading would be dishonest.
+- Use accepted_answers for legitimate short-answer variations.
+- Use tolerance only for numeric answers where rounding variation is legitimate.
+
+${previousReport}
+      `.trim();
+    }
+
+    function generateChatRequest() {
+      currentPrompt =
+        createChatRequest();
+
+      const subject =
+        findSubject(
+          DATA.setup.subjectId
+        );
+
+      const mode =
+        findMode(
+          DATA.setup.mode
+        );
+
+      currentPromptTitle =
+        `${subject.name} · ${mode.label}`;
+
+      route(
+        "prompt"
+      );
+    }
+
+    function openSelectedChat() {
+      const subjectId =
+        DATA.setup.subjectId;
+
+      const url =
+        DATA
+          .settings
+          .chatRoutes[
+            subjectId
+          ];
+
+      if (!url) {
+        alert(
+          "No chat link is saved for this subject. Add it in Data."
+        );
+
+        return;
+      }
+
+      try {
+        const parsed =
+          new URL(url);
+
+        if (
+          !/^https?:$/.test(
+            parsed.protocol
+          )
+        ) {
+          throw new Error();
+        }
+
+        window.open(
+          parsed.href,
+          "_blank",
+          "noopener"
+        );
+      } catch (error) {
+        alert(
+          "The saved chat link is not a valid HTTP or HTTPS URL."
+        );
+      }
+    }
+
+    function renderHome() {
+      const statistics =
+        DATA.statistics;
+
+      const accuracy =
+        statistics.answered
+          ? Math.round(
+              (
+                statistics.correct /
+                statistics.answered
+              ) * 100
+            )
+          : 0;
+
+      const active =
+        DATA.activeSession;
+
+      const unfinished =
+        active &&
+        active.index <
+          active.packet
+            .questions.length;
+
+      const subject =
+        findSubject(
+          DATA.setup.subjectId
+        );
+
+      const mode =
+        findMode(
+          DATA.setup.mode
+        );
+
+      const hasRoute =
+        Boolean(
+          DATA
+            .settings
+            .chatRoutes[
+              subject.id
+            ]
+        );
+
+      return `
+        <section class="panel hero">
+          <div class="eyebrow">
+            Execution layer
+          </div>
+
+          <h1>
+            Build the request.
+            Then drill.
+          </h1>
+
+          <p class="muted">
+            The subject chat inspects its own materials
+            and asks what you want tested.
+
+            DBD only runs the resulting packet and records
+            the evidence.
+          </p>
+
+          ${
+            unfinished
+              ? `
+                <div class="message info">
+                  <strong>
+                    Unfinished drill:
+                  </strong>
+
+                  ${escapeHTML(
+                    active.packet.subject
+                  )}
+
+                  · question
+
+                  ${active.index + 1}/
+                  ${
+                    active.packet
+                      .questions.length
+                  }
+
+                  <div class="actions">
+                    <button
+                      class="button primary"
+
+                      onclick="
+                        route('drill')
+                      "
+                    >
+                      CONTINUE DRILL
+                    </button>
+                  </div>
+                </div>
+              `
+              : ""
+          }
+
+          <div class="setup-grid">
+            <div class="field">
+              <label>
+                Subject / campaign
+              </label>
+
+              <select
+                onchange="
+                  updateSetup(
+                    'subjectId',
+                    this.value
+                  )
+                "
+              >
+                ${SUBJECTS.map(
+                  item => `
+                    <option
+                      value="${item.id}"
+
+                      ${
+                        DATA
+                          .setup
+                          .subjectId ===
+                        item.id
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      ${escapeHTML(
+                        item.campaign
+                      )}
+                      —
+                      ${escapeHTML(
+                        item.name
+                      )}
+                    </option>
+                  `
+                ).join("")}
+              </select>
+            </div>
+
+            <div class="field">
+              <label>
+                Mode
+              </label>
+
+              <select
+                onchange="
+                  updateSetup(
+                    'mode',
+                    this.value
+                  )
+                "
+              >
+                ${MODES.map(
+                  item => `
+                    <option
+                      value="${item.id}"
+
+                      ${
+                        DATA
+                          .setup
+                          .mode ===
+                        item.id
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      ${escapeHTML(
+                        item.label
+                      )}
+                    </option>
+                  `
+                ).join("")}
+              </select>
+
+              <div class="route-note">
+                ${escapeHTML(
+                  mode.description
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div class="setup-grid">
+            <div class="field">
+              <label>
+                Number of questions
+              </label>
+
+              <div class="count-row">
+                ${COUNT_PRESETS.map(
+                  number => `
+                    <button
+                      class="
+                        chip
+
+                        ${
+                          DATA
+                            .setup
+                            .count ===
+                          number
+                            ? "active"
+                            : ""
+                        }
+                      "
+
+                      onclick="
+                        updateSetup(
+                          'count',
+                          ${number}
+                        )
+                      "
+                    >
+                      ${number}
+                    </button>
+                  `
+                ).join("")}
+
+                <input
+                  type="number"
+                  min="1"
+                  max="50"
+
+                  value="${
+                    DATA
+                      .setup
+                      .count
+                  }"
+
+                  onchange="
+                    updateSetup(
+                      'count',
+                      this.value
+                    )
+                  "
+
+                  aria-label="
+                    Custom question count
+                  "
+                >
+              </div>
+            </div>
+
+            <div class="field">
+              <label>
+                Difficulty
+              </label>
+
+              <div class="choice-row">
+                ${DIFFICULTIES.map(
+                  difficulty => `
+                    <button
+                      class="
+                        chip
+
+                        ${
+                          DATA
+                            .setup
+                            .difficulty ===
+                          difficulty
+                            ? "active"
+                            : ""
+                        }
+                      "
+
+                      onclick="
+                        updateSetup(
+                          'difficulty',
+                          '${difficulty}'
+                        )
+                      "
+                    >
+                      ${difficulty}
+                    </button>
+                  `
+                ).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>
+              Additional focus
+              (optional)
+            </label>
+
+            <textarea
+              placeholder="Examples: cumulative review; only this week's material; prioritize calculation traps; use my latest SAT mistakes..."
+
+              oninput="
+                DATA.setup.focus =
+                  this.value;
+
+                saveData();
+              "
+            >${escapeHTML(
+              DATA.setup.focus
+            )}</textarea>
+          </div>
+
+          <div class="actions primary-grid">
+            <button
+              class="button primary"
+
+              onclick="
+                generateChatRequest()
+              "
+            >
+              GENERATE CHAT REQUEST
+            </button>
+
+            <button
+              class="button"
+
+              onclick="
+                route('import')
+              "
+            >
+              PASTE PACKET DIRECTLY
+            </button>
+          </div>
+
+          <div class="actions">
+            <button
+              class="button small"
+
+              onclick="
+                openSelectedChat()
+              "
+
+              ${
+                hasRoute
+                  ? ""
+                  : "disabled"
+              }
+            >
+              OPEN
+              ${escapeHTML(
+                subject.chatLabel
+              ).toUpperCase()}
+            </button>
+
+            <span class="route-note">
+              ${
+                hasRoute
+                  ? "Saved router link found."
+                  : "Save this subject's chat link in Data to enable the router button."
+              }
+            </span>
+          </div>
+        </section>
+
+        <section class="stats">
+          <div class="stat">
+            <strong>
+              ${statistics.answered}
+            </strong>
+
+            <span>
+              Questions answered
+            </span>
+          </div>
+
+          <div class="stat">
+            <strong>
+              ${accuracy}%
+            </strong>
+
+            <span>
+              All-time accuracy
+            </span>
+          </div>
+
+          <div class="stat">
+            <strong>
+              ${
+                DATA
+                  .completedSessions
+                  .length
+              }
+            </strong>
+
+            <span>
+              Completed drills
+            </span>
+          </div>
+        </section>
+
+        <div class="footer">
+          No ChatGPT API.
+
+          Copy request → choose material in chat →
+          paste JSON → drill.
+        </div>
+      `;
+    }
+
+    function renderPrompt() {
+      const subject =
+        findSubject(
+          DATA.setup.subjectId
+        );
+
+      const hasRoute =
+        Boolean(
+          DATA
+            .settings
+            .chatRoutes[
+              subject.id
+            ]
+        );
+
+      return `
+        <section class="panel">
+          <div class="eyebrow">
+            Stage 1 · Ask the subject chat
+          </div>
+
+          <h1 style="font-size: 2rem">
+            ${escapeHTML(
+              currentPromptTitle
+            )}
+          </h1>
+
+          <div class="message info">
+            <strong>
+              The chat should not return JSON immediately.
+            </strong>
+
+            <br>
+
+            <span class="muted">
+              It should inspect its context,
+              offer concrete material scopes,
+              recommend one,
+              and wait for your choice.
+            </span>
+          </div>
+
+          <div class="code">
+            ${escapeHTML(
+              currentPrompt
+            )}
+          </div>
+
+          <div class="actions primary-grid">
+            <button
+              class="button primary"
+
+              onclick="
+                copyText(
+                  currentPrompt,
+                  this
+                )
+              "
+            >
+              COPY REQUEST
+            </button>
+
+            <button
+              class="button"
+
+              onclick="
+                route('import')
+              "
+            >
+              I HAVE THE JSON PACKET
+            </button>
+          </div>
+
+          <div class="actions">
+            <button
+              class="button small"
+
+              onclick="
+                openSelectedChat()
+              "
+
+              ${
+                hasRoute
+                  ? ""
+                  : "disabled"
+              }
+            >
+              OPEN
+              ${escapeHTML(
+                subject.chatLabel
+              ).toUpperCase()}
+            </button>
+
+            <button
+              class="button small"
+
+              onclick="
+                route('home')
+              "
+            >
+              EDIT SETUP
+            </button>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderImport() {
+      return `
+        <section class="panel">
+          <div class="eyebrow">
+            Stage 2 · Packet in
+          </div>
+
+          <h1 style="font-size: 2rem">
+            Paste JSON.
+            Start punching.
+          </h1>
+
+          ${
+            importError
+              ? `
+                <div class="message error">
+                  ${escapeHTML(
+                    importError
+                  )}
+                </div>
+              `
+              : ""
+          }
+
+          <div class="field">
+            <textarea
+              class="code-input"
+              id="packet-input"
+
+              placeholder="Paste the DBD packet from the subject chat here."
+            ></textarea>
+          </div>
+
+          <div class="actions primary-grid">
+            <button
+              class="button primary"
+
+              onclick="
+                loadPacket()
+              "
+            >
+              START DRILL
+            </button>
+
+            <button
+              class="button"
+
+              onclick="
+                route('home')
+              "
+            >
+              CANCEL
+            </button>
+          </div>
+        </section>
+      `;
+    }
+
+    function extractJSON(
+      rawInput
+    ) {
+      let text =
+        String(
+          rawInput || ""
+        ).trim();
+
+      const fenced =
+        text.match(
+          /```(?:json)?\s*([\s\S]*?)```/i
+        );
+
+      if (fenced) {
+        text =
+          fenced[1].trim();
+      }
+
+      try {
+        return JSON.parse(text);
+      } catch (error) {
+        // Continue to bracket extraction.
+      }
+
+      const starts = [
+        text.indexOf("{"),
+        text.indexOf("[")
+      ]
+        .filter(
+          index =>
+            index >= 0
+        )
+        .sort(
+          (a, b) =>
+            a - b
+        );
+
+      for (
+        const start
+        of starts
+      ) {
+        const opening =
+          text[start];
+
+        const closing =
+          opening === "{"
+            ? "}"
+            : "]";
+
+        let depth =
+          0;
+
+        let inString =
+          false;
+
+        let escaped =
+          false;
+
+        for (
+          let index = start;
+          index < text.length;
+          index += 1
+        ) {
+          const character =
+            text[index];
+
+          if (inString) {
+            if (escaped) {
+              escaped =
+                false;
+            } else if (
+              character === "\\"
+            ) {
+              escaped =
+                true;
+            } else if (
+              character === '"'
+            ) {
+              inString =
+                false;
+            }
+          } else {
+            if (
+              character === '"'
+            ) {
+              inString =
+                true;
+            } else if (
+              character === opening
+            ) {
+              depth += 1;
+            } else if (
+              character === closing
+            ) {
+              depth -= 1;
+
+              if (
+                depth === 0
+              ) {
+                try {
+                  return JSON.parse(
+                    text.slice(
+                      start,
+                      index + 1
+                    )
+                  );
+                } catch (error) {
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      throw new Error(
+        "No valid JSON packet could be found."
+      );
+    }
+
+    function normalizeQuestion(
+      rawQuestion,
+      index
+    ) {
+      const prompt =
+        rawQuestion.prompt ??
+        rawQuestion.q ??
+        rawQuestion.question ??
+        rawQuestion.text;
+
+      if (!prompt) {
+        return null;
+      }
+
+      let choices =
+        rawQuestion.choices ??
+        rawQuestion.options ??
+        null;
+
+      if (
+        Array.isArray(
+          choices
+        )
+      ) {
+        const converted =
+          {};
+
+        choices.forEach(
+          (
+            choice,
+            choiceIndex
+          ) => {
+            converted[
+              String.fromCharCode(
+                65 + choiceIndex
+              )
+            ] =
+              String(choice);
+          }
+        );
+
+        choices =
+          converted;
+      }
+
+      if (
+        choices &&
+        typeof choices ===
+          "object"
+      ) {
+        const normalized =
+          {};
+
+        Object.entries(
+          choices
+        ).forEach(
+          ([key, value]) => {
+            normalized[
+              String(key)
+                .toUpperCase()
+            ] =
+              String(value);
+          }
+        );
+
+        choices =
+          normalized;
+      }
+
+      let answer =
+        rawQuestion.answer ??
+        rawQuestion.correct ??
+        rawQuestion.correct_answer ??
+        rawQuestion.expected_answer ??
+        "";
+
+      if (choices) {
+        const answerText =
+          String(answer)
+            .trim();
+
+        const matchingKey =
+          Object.keys(
+            choices
+          ).find(
+            key =>
+              key.toLowerCase() ===
+              answerText.toLowerCase()
+          )
+          ??
+          Object.keys(
+            choices
+          ).find(
+            key =>
+              String(
+                choices[key]
+              )
+                .trim()
+                .toLowerCase()
+              ===
+              answerText.toLowerCase()
+          );
+
+        if (matchingKey) {
+          answer =
+            matchingKey;
+        }
+      }
+
+      const acceptedAnswers =
+        Array.isArray(
+          rawQuestion.accepted_answers
+        )
+          ? rawQuestion
+              .accepted_answers
+              .map(String)
+          : [];
+
+      if (
+        answer !== ""
+      ) {
+        acceptedAnswers.unshift(
+          String(answer)
+        );
+      }
+
+      return {
+        id:
+          rawQuestion.id ??
+          `q${index + 1}`,
+
+        type:
+          rawQuestion.type ??
+          (
+            choices
+              ? "mcq"
+              : "short"
+          ),
+
+        prompt:
+          String(prompt),
+
+        choices,
+
+        answer:
+          String(answer),
+
+        acceptedAnswers:
+          [
+            ...new Set(
+              acceptedAnswers
+            )
+          ],
+
+        tolerance:
+          Number.isFinite(
+            Number(
+              rawQuestion.tolerance
+            )
+          )
+            ? Number(
+                rawQuestion.tolerance
+              )
+            : 0,
+
+        explanation:
+          String(
+            rawQuestion.explanation ??
+            rawQuestion.reason ??
+            rawQuestion.explain ??
+            ""
+          ),
+
+        whyWrong:
+          rawQuestion.why_wrong ??
+          rawQuestion.whyWrong ??
+          rawQuestion.wrong_explanations ??
+          {},
+
+        tags:
+          Array.isArray(
+            rawQuestion.tags
+          )
+            ? rawQuestion.tags.map(
+                String
+              )
+            : [],
+
+        difficulty:
+          String(
+            rawQuestion.difficulty ??
+            ""
+          )
+      };
+    }
+
+    function normalizePacket(
+      parsedPacket
+    ) {
+      const packet =
+        Array.isArray(
+          parsedPacket
+        )
+          ? {
+              questions:
+                parsedPacket
+            }
+          : parsedPacket;
+
+      if (
+        !packet ||
+        !Array.isArray(
+          packet.questions
+        )
+      ) {
+        throw new Error(
+          'The packet has no "questions" array.'
+        );
+      }
+
+      const questions =
+        packet.questions
+          .map(
+            normalizeQuestion
+          )
+          .filter(Boolean);
+
+      if (
+        questions.length === 0
+      ) {
+        throw new Error(
+          "The packet contains no valid questions."
+        );
+      }
+
+      return {
+        dbdVersion:
+          packet.dbd_version ??
+          APP_VERSION,
+
+        campaign:
+          packet.campaign ??
+          "Custom",
+
+        subject:
+          packet.subject ??
+          findSubject(
+            DATA.setup.subjectId
+          ).name,
+
+        topic:
+          packet.topic ??
+          "",
+
+        source:
+          packet.source ??
+          "",
+
+        mode:
+          packet.mode ??
+          DATA.setup.mode,
+
+        difficulty:
+          packet.difficulty ??
+          DATA.setup.difficulty,
+
+        questions
+      };
+    }
+
+    function loadPacket() {
+      try {
+        const packet =
+          normalizePacket(
+            extractJSON(
+              document.getElementById(
+                "packet-input"
+              ).value
+            )
+          );
+
+        DATA.activeSession = {
+          id:
+            `session_${Date.now()}`,
+
+          packet,
+
+          index:
+            0,
+
+          attempts:
+            [],
+
+          locked:
+            false,
+
+          selectedAnswer:
+            null,
+
+          typedAnswer:
+            "",
+
+          selfMarked:
+            null,
+
+          errorType:
+            null,
+
+          note:
+            "",
+
+          startedAt:
+            Date.now(),
+
+          questionStarted:
+            Date.now(),
+
+          questionElapsed:
+            0
+        };
+
+        importError =
+          "";
+
+        saveData();
+
+        route(
+          "drill"
+        );
+      } catch (error) {
+        importError =
+          error.message ||
+          "Could not load packet.";
+
+        render();
+      }
+    }
+
+    function currentQuestion() {
+      const active =
+        DATA.activeSession;
+
+      return (
+        active
+          .packet
+          .questions[
+            active.index
+          ]
+      );
+    }
+
+    function isMultipleChoice(
+      question
+    ) {
+      return Boolean(
+        question.choices &&
+        Object.keys(
+          question.choices
+        ).length
+      );
+    }
+
+    function chooseAnswer(
+      key
+    ) {
+      const active =
+        DATA.activeSession;
+
+      if (
+        !active ||
+        active.locked
+      ) {
+        return;
+      }
+
+      active.selectedAnswer =
+        key;
+
+      active.locked =
+        true;
+
+      active.questionElapsed =
+        (
+          Date.now() -
+          active.questionStarted
+        ) / 1000;
+
+      saveData();
+      render();
+    }
+
+    function submitTypedAnswer() {
+      const active =
+        DATA.activeSession;
+
+      if (
+        !active ||
+        active.locked
+      ) {
+        return;
+      }
+
+      active.typedAnswer =
+        document.getElementById(
+          "typed-answer"
+        ).value;
+
+      active.locked =
+        true;
+
+      active.questionElapsed =
+        (
+          Date.now() -
+          active.questionStarted
+        ) / 1000;
+
+      saveData();
+      render();
+    }
+
+    function setSelfMark(
+      value
+    ) {
+      DATA
+        .activeSession
+        .selfMarked =
+          value;
+
+      saveData();
+      render();
+    }
+
+    function setErrorType(
+      value
+    ) {
+      DATA
+        .activeSession
+        .errorType =
+          value;
+
+      saveData();
+      render();
+    }
+
+    function updateActiveNote(
+      value
+    ) {
+      DATA
+        .activeSession
+        .note =
+          value;
+
+      saveData();
+    }
+
+    function getCorrectness(
+      question
+    ) {
+      const active =
+        DATA.activeSession;
+
+      if (
+        question.type ===
+        "self_check"
+      ) {
+        return null;
+      }
+
+      if (
+        isMultipleChoice(
+          question
+        )
+      ) {
+        return (
+          normalizeAnswer(
+            active.selectedAnswer
+          )
+          ===
+          normalizeAnswer(
+            question.answer
+          )
+        );
+      }
+
+      if (
+        question.type ===
+        "numeric"
+      ) {
+        const given =
+          Number(
+            String(
+              active.typedAnswer
+            ).replace(
+              ",",
+              "."
+            )
+          );
+
+        const expected =
+          Number(
+            String(
+              question.answer
+            ).replace(
+              ",",
+              "."
+            )
+          );
+
+        if (
+          Number.isFinite(given) &&
+          Number.isFinite(expected)
+        ) {
+          return (
+            Math.abs(
+              given -
+              expected
+            )
+            <=
+            Math.max(
+              0,
+              question.tolerance ||
+              0
+            )
+          );
+        }
+      }
+
+      return (
+        question
+          .acceptedAnswers
+          .some(
+            answer =>
+              normalizeAnswer(
+                active.typedAnswer
+              )
+              ===
+              normalizeAnswer(
+                answer
+              )
+          )
+      );
+    }
+
+    function saveAndContinue() {
+      const active =
+        DATA.activeSession;
+
+      const question =
+        currentQuestion();
+
+      let correct =
+        getCorrectness(
+          question
+        );
+
+      if (
+        correct === null
+      ) {
+        correct =
+          active.selfMarked ===
+          true;
+      }
+
+      active.attempts.push({
+        questionId:
+          question.id,
+
+        prompt:
+          question.prompt,
+
+        type:
+          question.type,
+
+        selected:
+          isMultipleChoice(
+            question
+          )
+            ? active.selectedAnswer
+            : active.typedAnswer,
+
+        answer:
+          question.answer,
+
+        correct,
+
+        elapsed:
+          active.questionElapsed,
+
+        errorType:
+          correct
+            ? null
+            : (
+                active.errorType ||
+                "unclassified"
+              ),
+
+        note:
+          active.note || "",
+
+        tags:
+          question.tags,
+
+        difficulty:
+          question.difficulty,
+
+        explanation:
+          question.explanation
+      });
+
+      DATA
+        .statistics
+        .answered += 1;
+
+      if (correct) {
+        DATA
+          .statistics
+          .correct += 1;
+      } else {
+        DATA
+          .statistics
+          .wrong += 1;
+      }
+
+      active.index += 1;
+
+      if (
+        active.index >=
+        active
+          .packet
+          .questions
+          .length
+      ) {
+        finishSession();
+        return;
+      }
+
+      active.locked =
+        false;
+
+      active.selectedAnswer =
+        null;
+
+      active.typedAnswer =
+        "";
+
+      active.selfMarked =
+        null;
+
+      active.errorType =
+        null;
+
+      active.note =
+        "";
+
+      active.questionStarted =
+        Date.now();
+
+      active.questionElapsed =
+        0;
+
+      saveData();
+      render();
+    }
+
+    function finishSession() {
+      const active =
+        DATA.activeSession;
+
+      const correct =
+        active
+          .attempts
+          .filter(
+            attempt =>
+              attempt.correct
+          )
+          .length;
+
+      const answered =
+        active
+          .attempts
+          .length;
+
+      const totalTime =
+        active
+          .attempts
+          .reduce(
+            (
+              sum,
+              attempt
+            ) =>
+              sum +
+              (
+                attempt.elapsed ||
+                0
+              ),
+
+            0
+          );
+
+      const session = {
+        id:
+          active.id,
+
+        completedAt:
+          new Date()
+            .toISOString(),
+
+        campaign:
+          active.packet.campaign,
+
+        subject:
+          active.packet.subject,
+
+        topic:
+          active.packet.topic,
+
+        source:
+          active.packet.source,
+
+        mode:
+          active.packet.mode,
+
+        difficulty:
+          active.packet.difficulty,
+
+        answered,
+
+        correct,
+
+        wrong:
+          answered - correct,
+
+        accuracy:
+          answered
+            ? (
+                correct /
+                answered
+              ) * 100
+            : 0,
+
+        totalTime,
+
+        attempts:
+          active.attempts
+      };
+
+      DATA
+        .completedSessions
+        .unshift(
+          session
+        );
+
+      DATA.completedSessions =
+        DATA
+          .completedSessions
+          .slice(
+            0,
+            100
+          );
+
+      currentSessionId =
+        session.id;
+
+      DATA.activeSession =
+        null;
+
+      saveData();
+
+      route(
+        "summary"
+      );
+    }
+
+    function getSession(
+      sessionId
+    ) {
+      return (
+        DATA
+          .completedSessions
+          .find(
+            session =>
+              session.id ===
+              sessionId
+          )
+      );
+    }
+
+    function viewSession(
+      sessionId
+    ) {
+      currentSessionId =
+        sessionId;
+
+      route(
+        "summary"
+      );
+    }
+
+    function summarizeWeakTags(
+      session
+    ) {
+      const counts =
+        {};
+
+      session.attempts
+        .filter(
+          attempt =>
+            !attempt.correct
+        )
+        .forEach(
+          attempt => {
+            const tags =
+              attempt.tags?.length
+                ? attempt.tags
+                : ["untagged"];
+
+            tags.forEach(
+              tag => {
+                counts[tag] =
+                  (
+                    counts[tag] ||
+                    0
+                  ) + 1;
+              }
+            );
+          }
+        );
+
+      return Object.entries(
+        counts
+      )
+        .sort(
+          (a, b) =>
+            b[1] - a[1]
+        )
+        .slice(
+          0,
+          8
+        );
+    }
+
+    function summarizeErrorTypes(
+      session
+    ) {
+      const counts =
+        {};
+
+      session.attempts
+        .filter(
+          attempt =>
+            !attempt.correct
+        )
+        .forEach(
+          attempt => {
+            const errorType =
+              attempt.errorType ||
+              "unclassified";
+
+            counts[errorType] =
+              (
+                counts[errorType] ||
+                0
+              ) + 1;
+          }
+        );
+
+      return Object.entries(
+        counts
+      ).sort(
+        (a, b) =>
+          b[1] - a[1]
+      );
+    }
+
+    function createSessionReport(
+      session
+    ) {
+      const weakTags =
+        summarizeWeakTags(
+          session
+        );
+
+      const errorTypes =
+        summarizeErrorTypes(
+          session
+        );
+
+      const wrongAttempts =
+        session.attempts.filter(
+          attempt =>
+            !attempt.correct
+        );
+
+      const averageTime =
+        session.answered
+          ? (
+              session.totalTime /
+              session.answered
+            )
+          : 0;
+
+      return `
+DBD SESSION REPORT
+
+Campaign: ${session.campaign}
+Subject: ${session.subject}
+Topic: ${session.topic || "—"}
+Source: ${session.source || "—"}
+Mode: ${session.mode || "—"}
+Difficulty: ${session.difficulty || "—"}
+
+Performance:
+
+- Answered: ${session.answered}
+- Correct: ${session.correct}
+- Wrong: ${session.wrong}
+- Accuracy: ${Math.round(session.accuracy)}%
+- Total active question time: ${formatDuration(session.totalTime)}
+- Average time/question: ${formatDuration(averageTime)}
+
+Weak tags:
+
+${
+  weakTags.length
+    ? weakTags
+        .map(
+          ([tag, count]) =>
+            `- ${tag}: ${count} miss${count === 1 ? "" : "es"}`
+        )
+        .join("\n")
+    : "- none"
+}
+
+Error causes:
+
+${
+  errorTypes.length
+    ? errorTypes
+        .map(
+          ([errorType, count]) =>
+            `- ${getErrorLabel(errorType)}: ${count}`
+        )
+        .join("\n")
+    : "- none"
+}
+
+Wrong questions:
+
+${
+  wrongAttempts.length
+    ? wrongAttempts
+        .map(
+          (attempt, index) => `
+${index + 1}. ${attempt.prompt}
+My answer: ${attempt.selected || "—"}
+Correct answer: ${attempt.answer}
+Time: ${formatDuration(attempt.elapsed)}
+Error: ${getErrorLabel(attempt.errorType)}
+My note: ${attempt.note || "—"}
+Tags: ${attempt.tags?.join(", ") || "—"}
+          `.trim()
+        )
+        .join("\n\n")
+    : "None."
+}
+
+Use this report together with the files and prior conversation in this subject chat.
+
+Diagnose whether I need:
+
+1. concept teaching;
+2. easier scaffolding;
+3. fresh variants;
+4. timed fluency;
+5. method repair;
+6. interpretation repair; or
+7. a focus/carelessness intervention.
+
+Do not praise question volume by itself.
+
+Judge whether the learning loop has actually closed.
+      `.trim();
+    }
+
+    function createRepairPrompt(
+      session
+    ) {
+      return `
+Use the materials and conversation already available in this subject chat.
+
+Here is my latest DBD report:
+
+${createSessionReport(session)}
+
+First diagnose the failure through active conversation.
+
+Do not immediately produce another large packet if the problem is conceptual.
+
+Repair the misunderstanding or method first.
+
+When I demonstrate enough understanding, ask which material scope I want the repair drill to cover if that remains ambiguous.
+
+Then create a fresh DBD v0.7 repair packet using:
+
+- new variants;
+- 5–10 focused questions;
+- precise skill tags;
+- concise explanations.
+
+Return valid JSON only after the material scope is confirmed.
+      `.trim();
+    }
+
+    function renderDrill() {
+      const active =
+        DATA.activeSession;
+
+      if (!active) {
+        return `
+          <div class="empty">
+            No active packet.
+
+            <div class="actions">
+              <button
+                class="button"
+
+                onclick="
+                  route('import')
+                "
+              >
+                PASTE PACKET
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      const question =
+        currentQuestion();
+
+      const total =
+        active
+          .packet
+          .questions
+          .length;
+
+      const multipleChoice =
+        isMultipleChoice(
+          question
+        );
+
+      const correct =
+        active.locked
+          ? getCorrectness(
+              question
+            )
+          : null;
+
+      const selfCheckComplete =
+        question.type !==
+          "self_check"
+        ||
+        active.selfMarked !==
+          null;
+
+      const wrong =
+        correct === false
+        ||
+        (
+          question.type ===
+            "self_check"
+          &&
+          active.selfMarked ===
+            false
+        );
+
+      const canContinue =
+        active.locked
+        &&
+        selfCheckComplete
+        &&
+        (
+          !wrong
+          ||
+          active.errorType
+        );
+
+      return `
+        <div class="progress">
+          <div
+            style="
+              width:
+              ${
+                (
+                  active.index /
+                  total
+                ) * 100
+              }%
+            "
+          ></div>
+        </div>
+
+        <section class="panel">
+          <div class="question-meta">
+            <div>
+              ${escapeHTML(
+                active.packet.campaign
+              )}
+
+              ·
+
+              ${escapeHTML(
+                active.packet.subject
+              )}
+
+              ·
+
+              ${active.index + 1}/
+              ${total}
+            </div>
+
+            <div
+              class="timer"
+              id="timer"
+            >
+              ${formatDuration(
+                active.questionElapsed
+              )}
+            </div>
+          </div>
+
+          <div class="question-text">
+            ${escapeHTML(
+              question.prompt
+            )}
+          </div>
+
+          ${
+            multipleChoice
+              ? `
+                <div class="choices">
+                  ${Object.entries(
+                    question.choices
+                  ).map(
+                    ([key, value]) => {
+                      let classes =
+                        "answer-choice";
+
+                      if (
+                        active.locked
+                      ) {
+                        if (
+                          key ===
+                          active.selectedAnswer
+                        ) {
+                          classes +=
+                            " selected";
+                        }
+
+                        if (
+                          normalizeAnswer(
+                            key
+                          )
+                          ===
+                          normalizeAnswer(
+                            question.answer
+                          )
+                        ) {
+                          classes +=
+                            " correct";
+                        } else if (
+                          key ===
+                          active.selectedAnswer
+                        ) {
+                          classes +=
+                            " wrong";
+                        }
+                      }
+
+                      return `
+                        <button
+                          class="${classes}"
+
+                          ${
+                            active.locked
+                              ? "disabled"
+                              : ""
+                          }
+
+                          onclick="
+                            chooseAnswer(
+                              '${escapeHTML(key)}'
+                            )
+                          "
+                        >
+                          <strong>
+                            ${escapeHTML(key)}.
+                          </strong>
+
+                          ${escapeHTML(value)}
+                        </button>
+                      `;
+                    }
+                  ).join("")}
+                </div>
+              `
+              : `
+                <div class="field">
+                  <label>
+                    Your final answer
+                  </label>
+
+                  <input
+                    id="typed-answer"
+
+                    value="${escapeHTML(
+                      active.typedAnswer
+                    )}"
+
+                    ${
+                      active.locked
+                        ? "disabled"
+                        : ""
+                    }
+
+                    placeholder="Type the final result here"
+                  >
+                </div>
+
+                ${
+                  !active.locked
+                    ? `
+                      <button
+                        class="button primary block"
+
+                        onclick="
+                          submitTypedAnswer()
+                        "
+                      >
+                        CHECK ANSWER
+                      </button>
+                    `
+                    : ""
+                }
+              `
+          }
+
+          ${
+            active.locked
+              ? `
+                <div
+                  class="
+                    feedback
+
+                    ${
+                      correct === true
+                        ? "correct"
+                        : correct === false
+                          ? "wrong"
+                          : ""
+                    }
+                  "
+                >
+                  <strong class="feedback-tag">
+                    ${
+                      correct === true
+                        ? "Correct"
+                        : question.type ===
+                            "self_check"
+                          ? "Self-check"
+                          : "Wrong"
+                    }
+                  </strong>
+
+                  ${
+                    question.type ===
+                    "self_check"
+                      ? `
+                        <p>
+                          <strong>
+                            Reference:
+                          </strong>
+
+                          ${escapeHTML(
+                            question.answer
+                          )}
+                        </p>
+
+                        ${
+                          active.selfMarked ===
+                          null
+                            ? `
+                              <div class="actions">
+                                <button
+                                  class="button small"
+
+                                  onclick="
+                                    setSelfMark(true)
+                                  "
+                                >
+                                  I MET THE STANDARD
+                                </button>
+
+                                <button
+                                  class="button small"
+
+                                  onclick="
+                                    setSelfMark(false)
+                                  "
+                                >
+                                  I DID NOT
+                                </button>
+                              </div>
+                            `
+                            : ""
+                        }
+                      `
+                      : `
+                        <p>
+                          <strong>
+                            Answer:
+                          </strong>
+
+                          ${escapeHTML(
+                            question.answer
+                          )}
+                        </p>
+                      `
+                  }
+
+                  ${
+                    question.explanation
+                      ? `
+                        <p class="muted">
+                          ${escapeHTML(
+                            question.explanation
+                          )}
+                        </p>
+                      `
+                      : ""
+                  }
+
+                  ${
+                    correct === false
+                    &&
+                    question.whyWrong
+                    &&
+                    question.whyWrong[
+                      active.selectedAnswer
+                    ]
+                      ? `
+                        <p class="muted">
+                          <strong>
+                            Your trap:
+                          </strong>
+
+                          ${escapeHTML(
+                            question.whyWrong[
+                              active.selectedAnswer
+                            ]
+                          )}
+                        </p>
+                      `
+                      : ""
+                  }
+                </div>
+
+                ${
+                  wrong
+                    ? `
+                      <div style="margin-top: 17px">
+                        <label>
+                          What happened?
+                        </label>
+
+                        <div class="error-types">
+                          ${ERROR_TYPES.map(
+                            ([
+                              errorId,
+                              errorLabel
+                            ]) => `
+                              <button
+                                class="
+                                  error-type
+
+                                  ${
+                                    active.errorType ===
+                                    errorId
+                                      ? "active"
+                                      : ""
+                                  }
+                                "
+
+                                onclick="
+                                  setErrorType(
+                                    '${errorId}'
+                                  )
+                                "
+                              >
+                                ${escapeHTML(
+                                  errorLabel
+                                )}
+                              </button>
+                            `
+                          ).join("")}
+                        </div>
+                      </div>
+                    `
+                    : ""
+                }
+
+                <div
+                  class="field"
+                  style="margin-top: 17px"
+                >
+                  <label>
+                    One-line note
+                    (optional)
+                  </label>
+
+                  <input
+                    id="mistake-note"
+
+                    value="${escapeHTML(
+                      active.note || ""
+                    )}"
+
+                    oninput="
+                      updateActiveNote(
+                        this.value
+                      )
+                    "
+
+                    placeholder="Example: I knew the concept but chose the wrong method."
+                  >
+                </div>
+
+                <button
+                  class="button primary block"
+
+                  ${
+                    canContinue
+                      ? ""
+                      : "disabled"
+                  }
+
+                  onclick="
+                    saveAndContinue()
+                  "
+                >
+                  ${
+                    active.index + 1 ===
+                    total
+                      ? "FINISH DRILL"
+                      : "NEXT QUESTION"
+                  }
+
+                  →
+                </button>
+              `
+              : ""
+          }
+        </section>
+      `;
+    }
+
+    function renderSummary() {
+      const session =
+        getSession(
+          currentSessionId
+        )
+        ||
+        DATA
+          .completedSessions[0];
+
+      if (!session) {
+        return `
+          <div class="empty">
+            No completed session exists.
+          </div>
+        `;
+      }
+
+      const weakTags =
+        summarizeWeakTags(
+          session
+        );
+
+      const errorTypes =
+        summarizeErrorTypes(
+          session
+        );
+
+      const hasWrong =
+        session.wrong > 0;
+
+      return `
+        <section class="panel">
+          <div class="eyebrow">
+            Evidence out
+          </div>
+
+          <h1 style="font-size: 2rem">
+            ${escapeHTML(
+              session.subject
+            )}
+
+            ${
+              session.topic
+                ? ` · ${escapeHTML(
+                    session.topic
+                  )}`
+                : ""
+            }
+          </h1>
+
+          <p class="muted">
+            ${escapeHTML(
+              session.campaign
+            )}
+
+            ${
+              session.mode
+                ? ` · ${escapeHTML(
+                    session.mode
+                  )}`
+                : ""
+            }
+
+            ${
+              session.difficulty
+                ? ` · ${escapeHTML(
+                    session.difficulty
+                  )}`
+                : ""
+            }
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>
+                ${session.correct}/
+                ${session.answered}
+              </strong>
+
+              <span>
+                Correct
+              </span>
+            </div>
+
+            <div class="stat">
+              <strong>
+                ${Math.round(
+                  session.accuracy
+                )}%
+              </strong>
+
+              <span>
+                Accuracy
+              </span>
+            </div>
+
+            <div class="stat">
+              <strong>
+                ${formatDuration(
+                  session.totalTime
+                )}
+              </strong>
+
+              <span>
+                Active time
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>
+            What broke
+          </h2>
+
+          ${
+            hasWrong
+              ? `
+                <div>
+                  ${weakTags.map(
+                    ([tag, count]) => `
+                      <span class="pill">
+                        ${escapeHTML(tag)}
+                        ·
+                        ${count}
+                      </span>
+                    `
+                  ).join("")}
+                </div>
+
+                <div style="margin-top: 8px">
+                  ${errorTypes.map(
+                    ([
+                      errorType,
+                      count
+                    ]) => `
+                      <span class="pill">
+                        ${escapeHTML(
+                          getErrorLabel(
+                            errorType
+                          )
+                        )}
+                        ·
+                        ${count}
+                      </span>
+                    `
+                  ).join("")}
+                </div>
+              `
+              : `
+                <div class="message success">
+                  No wrong answers.
+
+                  The next packet should increase
+                  variation, transfer, or difficulty
+                  rather than repeat this packet.
+                </div>
+              `
+          }
+
+          <div class="actions primary-grid">
+            <button
+              class="button primary"
+
+              onclick="
+                copyText(
+                  createSessionReport(
+                    getSession(
+                      '${session.id}'
+                    )
+                  ),
+                  this
+                )
+              "
+            >
+              COPY REPORT TO AI
+            </button>
+
+            <button
+              class="button"
+
+              ${
+                hasWrong
+                  ? ""
+                  : "disabled"
+              }
+
+              onclick="
+                copyText(
+                  createRepairPrompt(
+                    getSession(
+                      '${session.id}'
+                    )
+                  ),
+                  this
+                )
+              "
+            >
+              COPY REPAIR REQUEST
+            </button>
+          </div>
+
+          <button
+            class="button block"
+            style="margin-top: 10px"
+
+            onclick="
+              route('home')
+            "
+          >
+            BUILD NEXT REQUEST
+          </button>
+        </section>
+      `;
+    }
+
+    function renderHistory() {
+      return `
+        <section class="panel">
+          <div class="eyebrow">
+            Performance record
+          </div>
+
+          <h1 style="font-size: 2rem">
+            Drill history
+          </h1>
+
+          <p class="muted">
+            This is evidence of what you actually did,
+            not a material library.
+          </p>
+
+          ${
+            DATA
+              .completedSessions
+              .length
+              ? DATA
+                  .completedSessions
+                  .map(
+                    session => `
+                      <div class="session">
+                        <div class="session-head">
+                          <div>
+                            <strong>
+                              ${escapeHTML(
+                                session.subject
+                              )}
+
+                              ${
+                                session.topic
+                                  ? ` · ${escapeHTML(
+                                      session.topic
+                                    )}`
+                                  : ""
+                              }
+                            </strong>
+
+                            <br>
+
+                            <small>
+                              ${new Date(
+                                session.completedAt
+                              ).toLocaleString()}
+
+                              ·
+
+                              ${escapeHTML(
+                                session.campaign
+                              )}
+                            </small>
+                          </div>
+
+                          <button
+                            class="button small"
+
+                            onclick="
+                              viewSession(
+                                '${session.id}'
+                              )
+                            "
+                          >
+                            REPORT
+                          </button>
+                        </div>
+
+                        <div style="margin-top: 9px">
+                          <span class="pill">
+                            ${session.correct}/
+                            ${session.answered}
+                          </span>
+
+                          <span class="pill">
+                            ${Math.round(
+                              session.accuracy
+                            )}%
+                          </span>
+
+                          <span class="pill">
+                            ${formatDuration(
+                              session.totalTime
+                            )}
+                          </span>
+
+                          <span class="pill">
+                            ${escapeHTML(
+                              session.mode ||
+                              "drill"
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    `
+                  )
+                  .join("")
+              : `
+                <div class="empty">
+                  No completed drills yet.
+                </div>
+              `
+          }
+        </section>
+      `;
+    }
+
+    async function requestPersistentStorage() {
+      if (
+        !navigator.storage ||
+        !navigator.storage.persist
+      ) {
+        alert(
+          "This browser does not support persistent-storage requests."
+        );
+
+        return;
+      }
+
+      const granted =
+        await navigator
+          .storage
+          .persist();
+
+      DATA
+        .settings
+        .persistentStorageGranted =
+          granted;
+
+      saveData();
+
+      alert(
+        granted
+          ? "Persistent browser storage was granted."
+          : "The browser kept normal storage behavior. Backups are still recommended."
+      );
+
+      render();
+    }
+
+    function saveChatRoutes() {
+      const routes = {
+        ...DATA
+          .settings
+          .chatRoutes
+      };
+
+      SUBJECTS.forEach(
+        subject => {
+          const input =
+            document.getElementById(
+              `route-${subject.id}`
+            );
+
+          if (input) {
+            routes[subject.id] =
+              input.value.trim();
+          }
+        }
+      );
+
+      DATA.settings.chatRoutes =
+        routes;
+
+      saveData();
+
+      alert(
+        "Chat routes saved."
+      );
+
+      render();
+    }
+
+    function exportBackup() {
+      saveData();
+
+      const blob =
+        new Blob(
+          [
+            JSON.stringify(
+              DATA,
+              null,
+              2
+            )
+          ],
+
+          {
+            type:
+              "application/json"
+          }
+        );
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+      const anchor =
+        document.createElement(
+          "a"
+        );
+
+      anchor.href =
+        url;
+
+      anchor.download =
+        `dbd-gazali-backup-${
+          new Date()
+            .toISOString()
+            .slice(
+              0,
+              10
+            )
+        }.json`;
+
+      anchor.click();
+
+      URL.revokeObjectURL(
+        url
+      );
+    }
+
+    function importBackup() {
+      const input =
+        document.createElement(
+          "input"
+        );
+
+      input.type =
+        "file";
+
+      input.accept =
+        ".json,application/json";
+
+      input.onchange =
+        async () => {
+          try {
+            const file =
+              input.files[0];
+
+            if (!file) {
+              return;
+            }
+
+            const parsed =
+              JSON.parse(
+                await file.text()
+              );
+
+            if (
+              !parsed.statistics ||
+              !Array.isArray(
+                parsed.completedSessions
+              )
+            ) {
+              throw new Error(
+                "This is not a valid DBD backup."
+              );
+            }
+
+            const defaults =
+              createEmptyData();
+
+            DATA = {
+              ...defaults,
+              ...parsed,
+
+              appVersion:
+                APP_VERSION,
+
+              profile:
+                defaults.profile,
+
+              setup: {
+                ...defaults.setup,
+                ...(
+                  parsed.setup ||
+                  {}
+                )
+              },
+
+              statistics: {
+                ...defaults.statistics,
+                ...parsed.statistics
+              },
+
+              settings: {
+                ...defaults.settings,
+                ...(
+                  parsed.settings ||
+                  {}
+                ),
+
+                chatRoutes: {
+                  ...defaults
+                    .settings
+                    .chatRoutes,
+
+                  ...(
+                    parsed.settings
+                      ?.chatRoutes ||
+                    {}
+                  )
+                }
+              }
+            };
+
+            saveData();
+
+            alert(
+              "DBD backup imported."
+            );
+
+            route(
+              "home"
+            );
+          } catch (error) {
+            alert(
+              error.message ||
+              "The backup could not be imported."
+            );
+          }
+        };
+
+      input.click();
+    }
+
+    function resetData() {
+      const confirmed =
+        confirm(
+          "Delete all DBD progress and saved chat routes from this browser?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      DATA =
+        createEmptyData();
+
+      saveData();
+
+      route(
+        "home"
+      );
+    }
+
+    function renderData() {
+      return `
+        <section class="panel">
+          <div class="eyebrow">
+            Local persistence
+          </div>
+
+          <h1 style="font-size: 2rem">
+            DBD remembers this browser.
+          </h1>
+
+          <div class="message">
+            <strong>
+              Storage key:
+            </strong>
+
+            dbd_gazali
+
+            <br><br>
+
+            <span class="muted">
+              Updating the code on the same GitHub
+              Pages origin normally keeps this data.
+
+              Another browser or device needs a backup
+              import until cloud sync is added later.
+            </span>
+          </div>
+
+          <div class="actions">
+            <button
+              class="button primary"
+
+              onclick="
+                requestPersistentStorage()
+              "
+            >
+              REQUEST PERSISTENT STORAGE
+            </button>
+
+            <button
+              class="button"
+
+              onclick="
+                exportBackup()
+              "
+            >
+              EXPORT BACKUP
+            </button>
+
+            <button
+              class="button"
+
+              onclick="
+                importBackup()
+              "
+            >
+              IMPORT BACKUP
+            </button>
+
+            <button
+              class="button danger"
+
+              onclick="
+                resetData()
+              "
+            >
+              RESET DATA
+            </button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="eyebrow">
+            Router
+          </div>
+
+          <h2>
+            Saved subject-chat links
+          </h2>
+
+          <p class="muted">
+            These are bookmarks only.
+
+            DBD does not read the chat or send
+            messages automatically.
+          </p>
+
+          <div class="route-grid">
+            ${SUBJECTS.map(
+              subject => `
+                <div class="route-card">
+                  <strong>
+                    ${escapeHTML(
+                      subject.name
+                    )}
+                  </strong>
+
+                  <input
+                    id="route-${subject.id}"
+
+                    value="${escapeHTML(
+                      DATA
+                        .settings
+                        .chatRoutes[
+                          subject.id
+                        ] || ""
+                    )}"
+
+                    placeholder="https://chatgpt.com/c/..."
+                  >
+                </div>
+              `
+            ).join("")}
+          </div>
+
+          <div class="actions">
+            <button
+              class="button primary"
+
+              onclick="
+                saveChatRoutes()
+              "
+            >
+              SAVE CHAT ROUTES
+            </button>
+          </div>
+        </section>
+      `;
+    }
+
+    async function copyText(
+      text,
+      button
+    ) {
+      try {
+        await navigator
+          .clipboard
+          .writeText(
+            text
+          );
+      } catch (error) {
+        const textarea =
+          document.createElement(
+            "textarea"
+          );
+
+        textarea.value =
+          text;
+
+        document.body.appendChild(
+          textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+          "copy"
+        );
+
+        textarea.remove();
+      }
+
+      const original =
+        button.textContent;
+
+      button.textContent =
+        "COPIED ✓";
+
+      setTimeout(
+        () => {
+          button.textContent =
+            original;
+        },
+
+        1300
+      );
+    }
+
+    function render() {
+      renderNavigation();
+
+      const views = {
+        home:
+          renderHome,
+
+        prompt:
+          renderPrompt,
+
+        import:
+          renderImport,
+
+        drill:
+          renderDrill,
+
+        summary:
+          renderSummary,
+
+        history:
+          renderHistory,
+
+        data:
+          renderData
+      };
+
+      document.getElementById(
+        "application"
+      ).innerHTML =
+        (
+          views[currentView] ||
+          renderHome
+        )();
+
+      if (
+        currentView ===
+        "drill"
+      ) {
+        startTimer();
+      }
+    }
+
+    render();
   </script>
 </body>
 </html>
