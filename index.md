@@ -8,14 +8,16 @@ title: gazalied
 south jakarta
 
 > ## apps
-> ### [dbd](https://gazalied.github.io/)
-> drill baby drill. quiz app
+> ### [dbd lite](https://gazalied.github.io/dbdlite)
+> dumbed down quiz app
 > ### [jakmap](https://gazalied.github.io/jakmap/)
 > interactive diagrammatic jakarta public transit map
 > ### [clock](https://gazalied.github.io/clock/)
 > clock with task manager
 > ### [greader](https://gazalied.github.io/greader)
 > word for word fast reader
+> > ~~[dbd](https://gazalied.github.io/dbd)~~
+> ~~drill baby drill. quiz app~~
 
 
 > ## gamez
