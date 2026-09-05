@@ -8,8 +8,8 @@ title: gazalied
 south jakarta
 
 > ## apps
-> ### [dbd lite](https://gazalied.github.io/dbdlite)
-> dumbed down quiz app
+> ### [dbd base](https://gazalied.github.io/dbdbase)
+> quiz app
 > ### [jakmap](https://gazalied.github.io/jakmap/)
 > interactive diagrammatic jakarta public transit map
 > ### [clock](https://gazalied.github.io/clock/)
