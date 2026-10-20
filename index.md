@@ -16,8 +16,15 @@ south jakarta
 > clock with task manager
 > ### [greader](https://gazalied.github.io/greader)
 > word for word fast reader
-> > ~~[dbd](https://gazalied.github.io/dbd)~~
-> ~~drill baby drill. quiz app~~
+> ### [greader](https://gazalied.github.io/greader)
+> word for word fast reader
+> > ### [orbit](https://grab-orbit-3d-tracker.gazali-ed.chatgpt.site)
+> grad delivery tracker, but cool
+> > ### [spatio](https://spatio-play.gazali-ed.chatgpt.site)
+> next best thing to theotown
+> > ### [transmania](https://transmania-gazali.gazali-ed.chatgpt.site)
+> nerd ass transjakarta quiz
+
 
 
 > ## gamez
