@@ -15,6 +15,10 @@ title: gazalied
 > next best thing to theotown
 > ### [transmania](https://transmania-gazali.gazali-ed.chatgpt.site)
 > nerd ass transjakarta quiz
+> ### ~~[arteri](example.com)~~
+> ~~all in one gtfs -> schematic view + phone vr/ar~~
+> ### ~~[permeo](example.com)~~
+> ~~study of jakarta road's permeabilty + gridded street diagram~~
 
 > ## apps
 > ### [clock](https://gazalied.github.io/clock/)
